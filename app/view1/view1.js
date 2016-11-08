@@ -19,10 +19,8 @@ angular.module('myApp.view1', ['ngRoute', 'firebase'])
     .controller('LoginCtrl', ['$scope', '$firebaseAuth', 'currentAuth', 'Auth', '$location', function($scope, $firebaseAuth, currentAuth, Auth, $location) {
 
         if (currentAuth) {
-            $scope.loggedIn = true;
             $location.path( "/dashboard" );
         } else {
-            $scope.loggedIn = false;
             console.log($scope.loggedIn);
         }
 
@@ -31,14 +29,7 @@ angular.module('myApp.view1', ['ngRoute', 'firebase'])
             var pass = $scope.user.password;
 
             Auth.$signInWithEmailAndPassword(user, pass).then(function(response) {
-                if (currentAuth) {
-                    $scope.loggedIn = true;
-                    console.log($scope.loggedIn);
-                } else {
-                    $scope.loggedIn = false;
-                    console.log($scope.loggedIn);
-                }
-                console.log("Logged in");
+                $location.path( "/dashboard" );
             }).catch(function(error) {
                 console.log(error);
             });

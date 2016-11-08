@@ -33,35 +33,23 @@ angular.module('myApp.view3', ['ngRoute', 'firebase'])
 
     $scope.userInfo = currentAuth.$getAuth();
     if (currentAuth) {
-        console.log($scope.loggedIn);
         $timeout(function() {
             firebase.database().ref('/users/' + currentAuth.$getAuth().uid).once('value').then(function(snapshot) {
-                $scope.checkValue = snapshot.val().checkbox;
-                console.log(snapshot.val())
+                $scope.snapshot = snapshot.val();
+                console.log($scope.snapshot)
             });
         },1000);
     } else {
         console.log("Not logged in");
     }
     console.log(currentAuth.$getAuth());
-
-    $scope.logUserOut = function() {
-        currentAuth.updateProfile({
-            refreshToken: null
-        }).then(function() {
-            console.log(refreshToken)
-        }, function(error) {
-            console.log(error)
-        });
-    };
-
     $scope.saveSettings = function() {
-        $scope.updateCheckbox($scope.checkValue);
+        $scope.updateCheckbox($scope.snapshot.checkbox);
         console.log("Settings Saved")
     };
 
     $scope.updateCheckbox = function(value) {
-        firebase.database().ref('users/' + currentAuth.$getAuth().uid).update({
+        firebase.database().ref('users/' + currentAuth.$getAuth().uid).set({
             checkbox: value
         });
     }
